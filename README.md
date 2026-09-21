@@ -128,16 +128,25 @@ API 요청 결과에 따라 사용자에게 적절한 피드백을 제공하며,
    - 에러 화면에서 **[다시 시도]** 버튼 클릭 시 정상 API 호출로 복구되는 흐름을 검증할 수 있습니다.
 
 2. **브라우저 개발자 도구(Console) 테스트**
-   콘솔창(`F12`)에서 전역 함수를 호출하여 즉시 상태를 전환할 수 있습니다.
-   ```javascript
-   // Error 상태 및 다시 시도 UI 확인
-   __simulateGitHubState('error');
 
-   // Empty 상태 UI 확인
-   __simulateGitHubState('empty');
+콘솔창(`F12`)에서 전역 디버깅 객체를 호출하여 GitHub API의 각 상태를 테스트할 수 있습니다.
 
-   // 정상 API 상태로 복구
-   __simulateGitHubState('reset');
+```javascript
+// 현재 GitHub API 상태 확인
+portfolioDebug.github.status();
+
+// 성공 상태 테스트
+portfolioDebug.github.simulateSuccess();
+
+// Empty 상태 테스트
+portfolioDebug.github.simulateEmpty();
+
+// API 오류 상태 테스트
+portfolioDebug.github.requestNotFound();
+
+// 실제 GitHub API 다시 요청
+portfolioDebug.github.reload();
+```
 
 ### 5.5 Contact Form
 문의 폼 입력값에 대한 유효성 검사를 수행합니다.
