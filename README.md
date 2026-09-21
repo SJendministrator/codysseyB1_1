@@ -108,15 +108,36 @@ GitHub REST API를 사용하여 저장소 목록을 동적으로 가져옵니다
 - `async/await` 및 `try/catch`를 사용한 비동기/예외 처리
 - Fork 저장소 및 Archived 저장소는 목록에서 제외 필터링 적용
 
-### 5.4 GitHub API 상태 처리
-API 요청 결과에 따라 직관적인 UI 피드백을 제공합니다.
+### 5.4 GitHub API 상태 및 오류 시뮬레이션
 
-| 상태 | 처리 내용 |
+API 요청 결과에 따라 사용자에게 적절한 피드백을 제공하며, 모든 UI 상태(Loading / Success / Empty / Error)를 직접 검증할 수 있도록 테스트 모드를 제공합니다.
+
+| 상태 | 화면 표시 및 처리 방식 |
 | :--- | :--- |
-| **Loading** | 프로젝트를 불러오는 중이라는 메시지 표시 |
-| **Success** | GitHub 저장소 데이터를 프로젝트 카드로 출력 |
-| **Empty** | 표시할 프로젝트가 없다는 안내 메시지 표시 |
-| **Error** | 요청 실패 오류 메시지 및 다시 시도 버튼 노출 |
+| **Loading** | 스켈레톤 UI 또는 스피너와 함께 "불러오는 중" 안내 표시 |
+| **Success** | 필터링된 저장소 목록을 프로젝트 카드로 그리드 출력 |
+| **Empty** | 가져온 저장소가 없을 경우 "표시할 프로젝트가 없습니다" 안내 표시 |
+| **Error** | 네트워크 실패/Rate Limit 초과 시 안내 메시지 및 **[다시 시도]** 버튼 렌더링 |
+
+#### API 상태별 테스트 방법
+평가자 및 개발자가 정상 케이스 외의 UI를 확인할 수 있도록 URL 파라미터 및 콘솔 테스트 인터페이스를 지원합니다.
+
+1. **URL 파라미터 방식**
+   - **Error 상태 테스트**: `https://<배포주소>/?test_api=error`
+   - **Empty 상태 테스트**: `https://<배포주소>/?test_api=empty`
+   - 에러 화면에서 **[다시 시도]** 버튼 클릭 시 정상 API 호출로 복구되는 흐름을 검증할 수 있습니다.
+
+2. **브라우저 개발자 도구(Console) 테스트**
+   콘솔창(`F12`)에서 전역 함수를 호출하여 즉시 상태를 전환할 수 있습니다.
+   ```javascript
+   // Error 상태 및 다시 시도 UI 확인
+   __simulateGitHubState('error');
+
+   // Empty 상태 UI 확인
+   __simulateGitHubState('empty');
+
+   // 정상 API 상태로 복구
+   __simulateGitHubState('reset');
 
 ### 5.5 Contact Form
 문의 폼 입력값에 대한 유효성 검사를 수행합니다.

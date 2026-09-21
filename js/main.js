@@ -567,8 +567,7 @@ contactForm.addEventListener(
 
         formSuccess.textContent =
             `${name.value.trim()}님, ` +
-            "메시지가 준비되었습니다. " +
-            "빠르게 답변드릴게요!";
+            "메시지가 준비되었습니다. ";
 
         formSuccess.classList.add(
             "is-success"
