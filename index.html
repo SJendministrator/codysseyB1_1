@@ -1,44 +1,68 @@
+<!-- [역할] HTML5 최신 표준 규격을 준수함을 브라우저 렌더링 엔진에 선언합니다. -->
 <!DOCTYPE html>
+<!-- [역할] 문서의 기본 언어를 한국어(ko)로 설정하고, 초기 테마 상태를 다크 모드로 지정합니다. -->
+<!-- [JS 연결 변수] const html = document.documentElement; -->
+<!-- [상태 변화: 테마 토글 클릭 시] js/main.js의 renderTheme()에 의해 data-theme="dark" <-> data-theme="light" 속성값이 교체되며, CSS 변수(:root vs [data-theme="dark"])가 전환되어 전체 배경/글자색이 변경됩니다. -->
 <html lang="ko" data-theme="dark">
 
+<!-- [역할] 문서의 메타데이터, 외부 폰트, 스타일시트 및 자바스크립트 파일을 정의하는 헤드 태그입니다. -->
 <head>
+    <!-- [역할] 전 세계 언어 및 한글이 깨지지 않도록 UTF-8 인코딩을 지정합니다. -->
     <meta charset="UTF-8">
+    <!-- [역할] 모바일, 태블릿, 데스크톱 등 반응형 화면에서 뷰포트 너비와 초기 확대 배율을 1:1로 맞춥니다. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- [역할] 브라우저 상단 탭 및 북마크에 노출될 웹페이지의 제목을 정의합니다. -->
     <title>My Portfolio</title>
 
+    <!-- [역할] 구글 폰트 서버와의 DNS 조회 및 핸드셰이크를 미리 수행하여 폰트 로딩 속도를 최적화합니다. -->
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- [역할] 구글 정적 리소스(Gstatic) 서버 연결을 사전 설정합니다. -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <!-- [역할] 디자인에 사용할 웹 폰트(Do Hyeon, Press Start 2P)를 구글 폰트 서버에서 불러옵니다. -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Press+Start+2P&display=swap"
         href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Press+Start+2P&display=swap"
         rel="stylesheet"
     >
 
+    <!-- [역할] 모든 레이아웃, 색상 변수, 반응형 스타일을 취합한 루트 스타일시트 파일을 연결합니다. -->
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 
+    <!-- [역할] DOM 트리가 완전히 파싱된 후 실행되도록 defer 속성을 적용하여 메인 자바스크립트 파일을 로드합니다. -->
+    <!-- [상태 변화] DOM이 완성된 직후 fetchRepositories(), renderScrollUi(), renderTheme() 등이 자동 실행됩니다. -->
     <!-- JavaScript -->
     <script src="js/main.js" defer></script>
+<!-- [역할] 메타데이터 정의 영역(head)을 마칩니다. -->
 </head>
 
+<!-- [역할] 브라우저 화면에 실제로 렌더링되는 모든 콘텐츠를 담는 바디 태그입니다. -->
 <body>
 
     <!-- ==============================
          Header / Navigation
     ============================== -->
+    <!-- [역할] 상단 고정 네비게이션 바의 최상위 컨테이너입니다. -->
+    <!-- [JS 연결 변수] const header = document.querySelector(".header"); -->
+    <!-- [상태 변화: 스크롤 이동 시] window.scrollY가 headerThreshold(60px) 이상이 되면 'scrolled' 클래스가 toggle되어 추가되며 배경색 불투명도 및 하단 그림자가 생깁니다. 60px 미만으로 올라가면 'scrolled' 클래스가 제거됩니다. -->
     <header id="header" class="header">
 
+        <!-- [역할] 네비게이션 요소를 감싸며 양쪽 여백 및 Flex 정렬을 담당하는 inner 컨테이너입니다. -->
         <nav class="navbar container">
 
-            <!-- Logo -->
+            <!-- [역할] 클릭 시 페이지 최상단(#hero)으로 부드럽게 이동하는 로고 앵커 태그입니다. -->
+            <!-- [JS 연결 변수] const navLinks = document.querySelectorAll(".nav-menu a, .hero-buttons a, .logo"); 에 포함됨 -->
+            <!-- [상태 변화: 클릭 시] event.preventDefault() 후 #hero 위치로 부드럽게 스크롤되며 모바일 메뉴가 열려있다면 closeMobileMenu()가 호출되어 닫힙니다. -->
             <a href="#hero" class="logo">
                 My Portfolio
             </a>
 
 
+            <!-- [역할] 모바일 화면(768px 미만)에서 햄버거 메뉴를 열고 닫는 토글 버튼입니다. -->
+            <!-- [JS 연결 변수] const navToggle = document.querySelector(".nav-toggle"); -->
+            <!-- [상태 변화: 클릭 시] 1. navMenu.classList.toggle("active") 결과에 따라 isOpen(true/false) 상태가 반전됩니다. 2. navToggle에 'active' 클래스가 추가/제거되어 아이콘 모양이 바뀝니다. 3. aria-expanded 속성이 "false" <-> "true"로 교체됩니다. 4. aria-label 속성이 "메뉴 열기" <-> "메뉴 닫기"로 교체됩니다. -->
             <!-- Mobile Menu Button -->
             <button
                 type="button"
@@ -50,32 +74,48 @@
             </button>
 
 
+            <!-- [역할] 각 섹션으로 이동하는 네비게이션 메뉴 링크 목록 컨테이너입니다. -->
+            <!-- [JS 연결 변수] const navMenu = document.querySelector(".nav-menu"); -->
+            <!-- [상태 변화: navToggle 클릭 시] 'active' 클래스가 추가되면 모바일 화면에서 숨겨져 있던 메뉴창이 슬라이드되어 나타납니다. 다시 클릭하거나 메뉴 링크 클릭 시 'active'가 제거되어 닫힙니다. -->
             <!-- Navigation Menu -->
             <ul class="nav-menu">
 
+                <!-- [역할] Home(#hero) 섹션으로 이동하는 메뉴 리스트 아이템입니다. -->
                 <li>
+                    <!-- [JS 연결 변수] navLinks에 포함됨 / 클릭 시 부드럽게 #hero로 이동하고 모바일 메뉴가 닫힙니다. -->
                     <a href="#hero">Home</a>
                 </li>
 
+                <!-- [역할] About(#about) 섹션으로 이동하는 메뉴 리스트 아이템입니다. -->
                 <li>
+                    <!-- [JS 연결 변수] navLinks에 포함됨 / 클릭 시 부드럽게 #about으로 이동하고 모바일 메뉴가 닫힙니다. -->
                     <a href="#about">About</a>
                 </li>
 
+                <!-- [역할] Skills(#skills) 섹션으로 이동하는 메뉴 리스트 아이템입니다. -->
                 <li>
+                    <!-- [JS 연결 변수] navLinks에 포함됨 / 클릭 시 부드럽게 #skills로 이동하고 모바일 메뉴가 닫힙니다. -->
                     <a href="#skills">Skills</a>
                 </li>
 
+                <!-- [역할] Projects(#projects) 섹션으로 이동하는 메뉴 리스트 아이템입니다. -->
                 <li>
+                    <!-- [JS 연결 변수] navLinks에 포함됨 / 클릭 시 부드럽게 #projects로 이동하고 모바일 메뉴가 닫힙니다. -->
                     <a href="#projects">Projects</a>
                 </li>
 
+                <!-- [역할] Contact(#contact) 섹션으로 이동하는 메뉴 리스트 아이템입니다. -->
                 <li>
+                    <!-- [JS 연결 변수] navLinks에 포함됨 / 클릭 시 부드럽게 #contact로 이동하고 모바일 메뉴가 닫힙니다. -->
                     <a href="#contact">Contact</a>
                 </li>
 
             </ul>
 
 
+            <!-- [역할] 라이트 모드와 다크 모드를 상호 전환하는 테마 토글 버튼입니다. -->
+            <!-- [JS 연결 변수] const themeToggle = document.querySelector(".theme-toggle"); -->
+            <!-- [상태 변화: 클릭 시] 1. currentTheme이 'dark'면 'light'로, 'light'면 'dark'로 계산됩니다. 2. localStorage의 'portfolio-theme' 키에 저장됩니다. 3. renderTheme()에 의해 html 태그의 data-theme이 변경됩니다. 4. 버튼 텍스트가 ☀️ <-> 🌙 로 변경됩니다. 5. aria-label이 "라이트 모드로 전환" <-> "다크 모드로 전환"으로 변경됩니다. -->
             <!-- Theme Toggle -->
             <button
                 type="button"
@@ -93,35 +133,44 @@
     <!-- ==============================
          Main Content
     ============================== -->
+    <!-- [역할] 웹 페이지의 주요 콘텐츠 영역을 묶는 시맨틱 메인 태그입니다. -->
     <main>
 
         <!-- ==========================
              Hero
         =========================== -->
+        <!-- [역할] 사이트 진입 시 가장 먼저 보이는 대표 소개(Hero) 섹션입니다. -->
         <section id="hero" class="hero">
 
+            <!-- [역할] 히어로 섹션의 중앙 정렬과 최대 너비를 제어하는 그리드/플렉스 컨테이너입니다. -->
             <div class="container hero-content">
 
+                <!-- [역할] 타이틀 위에 들어가는 보조 서브타이틀 텍스트 영역입니다. -->
                 <p class="hero-subtitle">
                     
                 </p>
 
+                <!-- [역할] 페이지의 최우선 제목(이름)을 표시하는 메인 헤딩 태그입니다. -->
                 <h1>
                     박수정
                 </h1>
 
+                <!-- [역할] 개발자의 가치관이나 인용구를 표시하는 소개 문구 단락입니다. -->
                 <p class="hero-description">
                     「나의 꿈은 맑은 바람이 되어서」
                     <br>
                     한용운의 시 「나의 꿈, 2023 대학수학능력시험 필적확인란」
                 </p>
 
+                <!-- [역할] 프로젝트 확인 및 문의하기 섹션으로 바로 이동시키는 주요 액션 버튼 그룹입니다. -->
                 <div class="hero-buttons">
 
+                    <!-- [JS 연결 변수] navLinks에 포함됨 / 클릭 시 부드럽게 #projects 섹션으로 스크롤 이동합니다. -->
                     <a href="#projects" class="btn">
                         View Projects
                     </a>
 
+                    <!-- [JS 연결 변수] navLinks에 포함됨 / 클릭 시 부드럽게 #contact 섹션으로 스크롤 이동합니다. -->
                     <a href="#contact" class="btn">
                         Contact
                     </a>
@@ -136,43 +185,58 @@
         <!-- ==========================
              About
         =========================== -->
+        <!-- [역할] 개발자 본인에 대한 상세 자기소개를 담는 섹션입니다. -->
         <section id="about" class="about">
 
+            <!-- [역할] 콘텐츠의 너비 제한과 중앙 정렬을 위한 래퍼 컨테이너입니다. -->
             <div class="container">
 
+                <!-- [역할] 섹션의 타이틀 영역입니다. -->
+                <!-- [JS 연결 변수] const revealTargets에 포함됨 -->
+                <!-- [상태 변화: 스크롤 감지 시] 1. JS 초기화 시 target.classList.add("reveal")에 의해 투명/변위 상태가 됩니다. 2. 화면에 20% 이상 진입하면 IntersectionObserver 콜백이 실행되어 'is-visible' 클래스가 추가되고 위로 떠오르며 나타납니다. 3. 관찰이 해제(unobserve)됩니다. -->
                 <div class="section-title">
                     <h2>About Me</h2>
                 </div>
 
+                <!-- [역할] 프로필 사진과 소개 텍스트를 감싸는 2열/반응형 컨테이너입니다. -->
+                <!-- [JS 연결 변수] const revealTargets에 포함됨 -->
+                <!-- [상태 변화: 스크롤 감지 시] IntersectionObserver에 의해 화면 노출 시 'is-visible' 클래스가 추가되어 페이드인 애니메이션이 작동합니다. -->
                 <div class="about-content">
 
+                    <!-- [역할] 프로필 사진 이미지를 배치하는 박스입니다. -->
                     <div class="about-image">
+                        <!-- [역할] 프로필 사진 파일을 로드하고 스크린 리더용 대체 텍스트를 제공합니다. -->
                         <img
                             src="images/profile.jpg"
                             alt="프로필 이미지"
                         >
                     </div>
 
+                    <!-- [역할] 개발자의 가치관, 학습 방향성 및 경험을 기술한 텍스트 묶음입니다. -->
                     <div class="about-text">
-    <p>
-        안녕하세요. 웹 개발을 공부하고 있는 개발자 지망생입니다.
-    </p>
+                        <!-- [역할] 개발자 지망생으로서의 첫인사 문장입니다. -->
+                        <p>
+                            안녕하세요. 웹 개발을 공부하고 있는 개발자 지망생입니다.
+                        </p>
 
-    <p>
-        새로운 기술을 배우고 직접 구현해보는 과정을 좋아하며,
-        프론트엔드와 백엔드, 데이터베이스, AI 등 다양한 분야를 경험하고 있습니다.
-    </p>
+                        <!-- [역할] 기술적 관심사 및 경험 분야를 설명하는 단락입니다. -->
+                        <p>
+                            새로운 기술을 배우고 직접 구현해보는 과정을 좋아하며,
+                            프론트엔드와 백엔드, 데이터베이스, AI 등 다양한 분야를 경험하고 있습니다.
+                        </p>
 
-    <p>
-        프로젝트를 진행하면서 예상대로 동작하지 않는 문제를 자주 마주하지만,
-        단순히 결과만 맞추기보다 원인을 찾아 이해하고 해결하는 것을 중요하게 생각합니다.
-    </p>
+                        <!-- [역할] 문제 해결 태도 및 개발에 임하는 가치관을 설명하는 단락입니다. -->
+                        <p>
+                            프로젝트를 진행하면서 예상대로 동작하지 않는 문제를 자주 마주하지만,
+                            단순히 결과만 맞추기보다 원인을 찾아 이해하고 해결하는 것을 중요하게 생각합니다.
+                        </p>
 
-    <p>
-        아직 부족한 점이 많지만 새로운 것을 직접 시도하며 경험을 쌓고,
-        작은 프로젝트라도 끝까지 완성해 나가는 개발자가 되고자 합니다.
-    </p>
-</div>
+                        <!-- [역할] 지속적인 성장 의지와 앞으로의 다짐을 나타내는 단락입니다. -->
+                        <p>
+                            아직 부족한 점이 많지만 새로운 것을 직접 시도하며 경험을 쌓고,
+                            작은 프로젝트라도 끝까지 완성해 나가는 개발자가 되고자 합니다.
+                        </p>
+                    </div>
 
                 </div>
 
@@ -181,78 +245,99 @@
         </section>
 
 
-       <!-- ==========================
-     Skills
-=========================== -->
-<section id="skills" class="skills">
+        <!-- ==========================
+             Skills
+        =========================== -->
+        <!-- [역할] 보유하고 있는 기술 스택 목록을 보여주는 섹션입니다. -->
+        <section id="skills" class="skills">
 
-    <div class="container">
+            <!-- [역할] 스킬 섹션 내부 요소를 정렬하는 공통 그리드 컨테이너입니다. -->
+            <div class="container">
 
-        <div class="section-title">
-            <h2>Skills</h2>
-        </div>
+                <!-- [역할] 스킬 섹션 제목 헤더입니다. -->
+                <!-- [JS 연결 변수] revealTargets에 포함되어 스크롤 진입 시 'is-visible' 애니메이션이 적용됩니다. -->
+                <div class="section-title">
+                    <h2>Skills</h2>
+                </div>
 
-        <div class="skills-list">
+                <!-- [역할] 카드 형태의 기술 스택들을 CSS Grid를 통해 2차원 반응형으로 배치하는 목록 컨테이너입니다. -->
+                <div class="skills-list">
 
-            <article class="skill-card">
-                <h3>Python</h3>
-                <p>AI · Data Processing · Backend</p>
-            </article>
+                    <!-- [역할] Python 기술 스택 카드입니다. -->
+                    <!-- [JS 연결 변수] const revealTargets (querySelectorAll(".skill-card"))에 포함됨 -->
+                    <!-- [상태 변화: 스크롤 감지 시] 스크롤로 뷰포트 진입 시 'reveal' 상태에서 'is-visible' 클래스가 추가되어 순차적으로 화면에 나타납니다. -->
+                    <article class="skill-card">
+                        <h3>Python</h3>
+                        <p>AI · Data Processing · Backend</p>
+                    </article>
 
-            <article class="skill-card">
-                <h3>JavaScript</h3>
-                <p>DOM · Event Handling · API</p>
-            </article>
+                    <!-- [역할] JavaScript 기술 스택 카드입니다. (reveal 대상) -->
+                    <article class="skill-card">
+                        <h3>JavaScript</h3>
+                        <p>DOM · Event Handling · API</p>
+                    </article>
 
-            <article class="skill-card">
-                <h3>C</h3>
-                <p>Pointer · Struct · Dynamic Memory</p>
-            </article>
+                    <!-- [역할] C 언어 기술 스택 카드입니다. (reveal 대상) -->
+                    <article class="skill-card">
+                        <h3>C</h3>
+                        <p>Pointer · Struct · Dynamic Memory</p>
+                    </article>
 
-            <article class="skill-card">
-                <h3>C++</h3>
-                <p>Class · Encapsulation · Module</p>
-            </article>
+                    <!-- [역할] C++ 기술 스택 카드입니다. (reveal 대상) -->
+                    <article class="skill-card">
+                        <h3>C++</h3>
+                        <p>Class · Encapsulation · Module</p>
+                    </article>
 
-            <article class="skill-card">
-                <h3>Java</h3>
-                <p>Basic Programming · Web Development</p>
-            </article>
+                    <!-- [역할] Java 기술 스택 카드입니다. (reveal 대상) -->
+                    <article class="skill-card">
+                        <h3>Java</h3>
+                        <p>Basic Programming · Web Development</p>
+                    </article>
 
-            <article class="skill-card">
-                <h3>Kotlin</h3>
-                <p>Android Development</p>
-            </article>
+                    <!-- [역할] Kotlin 기술 스택 카드입니다. (reveal 대상) -->
+                    <article class="skill-card">
+                        <h3>Kotlin</h3>
+                        <p>Android Development</p>
+                    </article>
 
-            <article class="skill-card">
-                <h3>HTML / CSS</h3>
-                <p>Semantic HTML · Responsive Web</p>
-            </article>
+                    <!-- [역할] HTML / CSS 웹 표준 기술 스택 카드입니다. (reveal 대상) -->
+                    <article class="skill-card">
+                        <h3>HTML / CSS</h3>
+                        <p>Semantic HTML · Responsive Web</p>
+                    </article>
 
-            <article class="skill-card">
-                <h3>Linux</h3>
-                <p>SSH · Server · File Permission</p>
-            </article>
+                    <!-- [역할] Linux 서버 및 OS 기술 스택 카드입니다. (reveal 대상) -->
+                    <article class="skill-card">
+                        <h3>Linux</h3>
+                        <p>SSH · Server · File Permission</p>
+                    </article>
 
-            <article class="skill-card">
-                <h3>Git / GitHub</h3>
-                <p>Version Control · Repository Management</p>
-            </article>
+                    <!-- [역할] Git / GitHub 형상 관리 기술 스택 카드입니다. (reveal 대상) -->
+                    <article class="skill-card">
+                        <h3>Git / GitHub</h3>
+                        <p>Version Control · Repository Management</p>
+                    </article>
 
-        </div>
+                </div>
 
-    </div>
+            </div>
 
-</section>
+        </section>
 
 
         <!-- ==========================
              Projects
         =========================== -->
+        <!-- [역할] GitHub API를 연동하여 공개 저장소 목록을 동적으로 카드 형태로 보여주는 섹션입니다. -->
         <section id="projects" class="projects">
 
+            <!-- [역할] 프로젝트 섹션 내부 컨테이너입니다. -->
+            <!-- [JS 연결 변수] const revealTargets (querySelectorAll(".projects .container"))에 포함됨 -->
+            <!-- [상태 변화: 스크롤 감지 시] 섹션 영역이 화면에 노출되면 IntersectionObserver에 의해 'is-visible' 클래스가 적용됩니다. -->
             <div class="container">
 
+                <!-- [역할] 프로젝트 섹션 제목 및 API 연동 안내 설명글 영역입니다. -->
                 <div class="section-title">
 
                     <h2>Projects</h2>
@@ -264,7 +349,14 @@
                 </div>
 
 
-                <!-- API 상태 메시지 -->
+                <!-- [역할] GitHub REST API 요청 상태(로딩, 완료 개수, 실패 에러, 빈 상태)를 사용자에게 실시간 텍스트로 알리는 상태 영역입니다. -->
+                <!-- [접근성 속성] aria-live="polite": 텍스트가 바뀔 때 스크린 리더가 사용자 작업을 방해하지 않고 부드럽게 음성으로 읽어줍니다. -->
+                <!-- [JS 연결 변수] const projectStatus = document.querySelector(".project-status"); -->
+                <!-- [상태 변화: renderProjects(state) 실행 시] 
+                     1. state === "loading": projectStatus.innerHTML = '<span class="loading-spinner"></span> 프로젝트를 불러오는 중...'
+                     2. state === "error": projectStatus.textContent = "프로젝트를 불러올 수 없습니다. 잠시 후 다시 시도해 주세요."
+                     3. repositories.length === 0: projectStatus.textContent = "표시할 프로젝트가 없습니다."
+                     4. state === "success": projectStatus.textContent = "${repositories.length}개의 프로젝트를 표시하고 있습니다." -->
                 <div
                     class="project-status"
                     aria-live="polite"
@@ -273,13 +365,21 @@
                 </div>
 
 
-                <!-- GitHub Project Cards -->
+                <!-- [역할] JavaScript 비동기 통신으로 받아온 GitHub 저장소 카드(<article class="project-card">)들이 동적으로 삽입되는 그리드 부모 컨테이너입니다. -->
+                <!-- [JS 연결 변수] const projectList = document.querySelector(".project-list"); -->
+                <!-- [상태 변화: renderProjects(state, repositories) 실행 시] 
+                     1. 로딩/에러/빈 상태일 때: projectList.innerHTML = "" (비워짐)
+                     2. 성공 상태일 때: repositories.map()을 통해 각 저장소의 이름, 설명, 언어, 스타 개수, 안전한 링크가 주입된 카드 엘리먼트들로 가득 채워집니다. -->
                 <div class="project-list projects-grid">
                     <!-- JavaScript에서 동적으로 생성 -->
                 </div>
 
 
-                <!-- Retry Button -->
+                <!-- [역할] GitHub API 통신 실패(네트워크 오류, 요청 횟수 제한 초과 등) 시 노출되는 '다시 시도' 버튼입니다. -->
+                <!-- [초기 속성] hidden: 처음에는 숨겨져 있습니다. -->
+                <!-- [JS 연결 변수] const retryButton = document.querySelector(".retry-button"); -->
+                <!-- [상태 변화: renderProjects(state) 실행 시] state가 'error'일 때만 retryButton.hidden = false로 변경되어 화면에 나타납니다. 그 외(loading, success)에는 hidden = true로 숨겨집니다. -->
+                <!-- [상태 변화: 클릭 시] fetchRepositories()가 재호출되어 다시 로딩 스피너가 돌고 GitHub API 요청을 재시도합니다. -->
                 <button
                     type="button"
                     class="retry-button"
@@ -296,28 +396,44 @@
         <!-- ==========================
              Contact
         =========================== -->
+        <!-- [역할] 방문자가 이름, 이메일, 메시지를 작성하여 전송할 수 있는 문의 폼 섹션입니다. -->
         <section id="contact" class="contact">
 
+            <!-- [역할] 폼 레이아웃의 너비와 정렬을 맞추는 컨테이너입니다. -->
+            <!-- [JS 연결 변수] revealTargets에 포함되어 스크롤 시 화면에 서서히 떠오릅니다. -->
             <div class="container">
 
+                <!-- [역할] Contact 섹션 제목 영역입니다. -->
                 <div class="section-title">
                     <h2>Contact</h2>
                 </div>
 
 
+                <!-- [역할] 사용자 입력을 받는 폼 엘리먼트입니다. -->
+                <!-- [속성] novalidate: 브라우저 기본 말풍선 검증을 비활성화하고 main.js의 커스텀 유효성 검사 로직(validateField)을 사용하기 위해 선언되었습니다. -->
+                <!-- [JS 연결 변수] const contactForm = document.querySelector("#contact-form"); -->
+                <!-- [상태 변화: submit 이벤트 발생 시] event.preventDefault()로 페이지 새로고침을 막고, 전체 필드를 검증(map/every)하여 통과 시 form.reset()으로 초기화합니다. -->
                 <form
                     id="contact-form"
                     class="contact-form"
                     novalidate
                 >
 
-                    <!-- Name -->
+                    <!-- [역할] 이름 라벨, 입력 필드, 에러 문구를 하나로 묶는 폼 그룹 래퍼입니다. -->
+                    <!-- [JS 연결 변수] field.closest(".form-group")으로 탐색되는 기준 부모 요소입니다. -->
                     <div class="form-group">
 
+                        <!-- [역할] id="name" 인풋과 연결된 스크린 리더 및 시각적 라벨입니다. -->
                         <label for="name">
                             이름
                         </label>
 
+                        <!-- [역할] 사용자 이름을 입력받는 한 줄 텍스트 인풋 태그입니다. -->
+                        <!-- [JS 연결 변수] const fields = [...contactForm.querySelectorAll("input, textarea")]; 의 첫 번째 원소 -->
+                        <!-- [접근성 속성] aria-describedby="name-error": 오류 발생 시 스크린 리더가 하단 에러 메시지를 함께 읽어주도록 연결합니다. -->
+                        <!-- [상태 변화: 실시간 입력(input) 및 제출(submit) 시] 
+                             1. 빈 문자열일 때: classList에 'is-invalid' 추가 (빨간 테두리), aria-invalid="true"로 변경됨.
+                             2. 값이 정상 입력되었을 때: 'is-invalid' 제거, aria-invalid="false"로 복구됨. -->
                         <input
                             type="text"
                             id="name"
@@ -327,18 +443,28 @@
                             aria-describedby="name-error"
                         >
 
+                        <!-- [역할] 이름 필드에 유효하지 않은 값이 들어왔을 때 에러 메시지를 표시하는 공간입니다. -->
+                        <!-- [JS 연결 변수] fieldGroup.querySelector(".error-message"); -->
+                        <!-- [상태 변화: validateField(field) 실행 시] 이름이 비어있으면 textContent = "이름을(를) 입력해 주세요."가 출력되고, 정상 입력 시 빈 문자열("")로 지워집니다. -->
                         <small id="name-error" class="error-message"></small>
 
                     </div>
 
 
-                    <!-- Email -->
+                    <!-- [역할] 이메일 입력 필드 그룹 래퍼입니다. -->
                     <div class="form-group">
 
+                        <!-- [역할] id="email" 인풋과 연결된 라벨 태그입니다. -->
                         <label for="email">
                             이메일
                         </label>
 
+                        <!-- [역할] 사용자 이메일 주소를 입력받는 이메일 전용 인풋 태그입니다. -->
+                        <!-- [JS 연결 변수] fields 배열에 포함됨 -->
+                        <!-- [상태 변화: 실시간 입력(input) 및 제출(submit) 시] 
+                             1. 빈 문자열일 때: 'is-invalid' 추가, aria-invalid="true"
+                             2. 형식이 잘못되었을 때(정규표현식 emailPattern 불일치): 'is-invalid' 추가, aria-invalid="true"
+                             3. 정상적인 이메일(test@domain.com 등): 'is-invalid' 클래스 제거 및 aria-invalid="false"로 정상화. -->
                         <input
                             type="email"
                             id="email"
@@ -348,18 +474,24 @@
                             aria-describedby="email-error"
                         >
 
+                        <!-- [역할] 이메일 유효성 검사 실패 시 에러 문구를 표시하는 공간입니다. -->
+                        <!-- [상태 변화] 빈 필드일 땐 "이메일을(를) 입력해 주세요.", 정규식 위반 시 "올바른 이메일 형식을 입력해 주세요."가 주입되며 정상이면 사라집니다. -->
                         <small id="email-error" class="error-message"></small>
 
                     </div>
 
 
-                    <!-- Message -->
+                    <!-- [역할] 문의 메시지 본문 입력 필드 그룹 래퍼입니다. -->
                     <div class="form-group">
 
+                        <!-- [역할] id="message" 텍스트에어리어와 연결된 라벨 태그입니다. -->
                         <label for="message">
                             메시지
                         </label>
 
+                        <!-- [역할] 여러 줄의 문의 내용을 입력받는 텍스트 입력 영역 태그입니다. -->
+                        <!-- [JS 연결 변수] fields 배열에 포함됨 -->
+                        <!-- [상태 변화: 실시간 입력 및 제출 시] 빈 문자열이면 'is-invalid' 클래스가 추가되고 aria-invalid="true"가 되며, 1글자 이상 입력되면 오류 상태가 해제됩니다. -->
                         <textarea
                             id="message"
                             name="message"
@@ -369,12 +501,15 @@
                             aria-describedby="message-error"
                         ></textarea>
 
+                        <!-- [역할] 메시지 필드가 비어있을 때 에러 문구를 출력하는 공간입니다. -->
+                        <!-- [상태 변화] 내용이 없을 때 textContent = "메시지을(를) 입력해 주세요."가 출력됩니다. -->
                         <small id="message-error" class="error-message"></small>
 
                     </div>
 
 
-                    <!-- Submit -->
+                    <!-- [역할] 작성된 폼 내용을 검증하고 제출 이벤트를 발생시키는 전송 버튼입니다. -->
+                    <!-- [상태 변화: 클릭 시] contactForm에 'submit' 이벤트가 발생하여 JavaScript의 유효성 검사 콜백이 즉각 호출됩니다. -->
                     <button
                         type="submit"
                         class="submit-button"
@@ -383,7 +518,13 @@
                     </button>
 
 
-                    <!-- Success Message -->
+                    <!-- [역할] 폼 제출 시 최종 성공 여부 또는 폼 검증 실패 경고를 출력하는 피드백 메시지 영역입니다. -->
+                    <!-- [접근성 속성] aria-live="polite": 동적으로 결과 텍스트가 바뀔 때 스크린 리더로 통보합니다. -->
+                    <!-- [JS 연결 변수] const formSuccess = document.querySelector("#form-success"); -->
+                    <!-- [상태 변화: submit 이벤트 발생 시] 
+                         1. 검증 실패(오류 필드 존재): formSuccess.textContent = "입력 내용을 확인해 주세요.", 'is-success' 클래스 제거 (경고 스타일)
+                         2. 검증 통과(모두 정상): formSuccess.textContent = "${name}님, 메시지가 준비되었습니다.", 'is-success' 클래스 추가 (초록색 성공 스타일), 입력창 reset() 실행
+                         3. 사용자가 다시 입력을 시작할 때(input 이벤트): formSuccess.textContent = "" 로 즉시 초기화되어 지워집니다. -->
                     <p
                         id="form-success"
                         class="success-message"
@@ -402,16 +543,22 @@
     <!-- ==============================
          Footer
     ============================== -->
+    <!-- [역할] 웹사이트 하단 저작권 정보 및 외부 SNS/프로필 링크를 제공하는 시맨틱 푸터 태그입니다. -->
     <footer id="footer" class="footer">
 
+        <!-- [역할] 푸터 내부 콘텐츠의 정렬 및 너비를 제어하는 그리드 컨테이너입니다. -->
         <div class="container">
 
+            <!-- [역할] 저작권 연도와 작성자 이름을 표기하는 텍스트 단락입니다. -->
             <p>
                 &copy; 2026 박수정. All rights reserved.
             </p>
 
+            <!-- [역할] 외부 소셜 및 코드 저장소 링크들을 묶어주는 컨테이너입니다. -->
             <div class="social-links">
 
+                <!-- [역할] 새 탭(_blank)에서 개발자의 GitHub 프로필 페이지를 여는 앵커 태그입니다. -->
+                <!-- [보안 속성] rel="noopener noreferrer": 새 탭에서 열릴 때 부모 탭(window.opener) 변조 방지 및 리퍼러 누출을 차단합니다. -->
                 <a
                     href="#"
                     target="_blank"
@@ -420,6 +567,7 @@
                     GitHub
                 </a>
 
+                <!-- [역할] 새 탭에서 LinkedIn 프로필을 여는 앵커 태그입니다. (보안 속성 동일 적용) -->
                 <a
                     href="#"
                     target="_blank"
@@ -438,6 +586,10 @@
     <!-- ==============================
          Scroll To Top
     ============================== -->
+    <!-- [역할] 페이지 하단으로 내려갔을 때 클릭하면 최상단(Y=0)으로 즉시/부드럽게 올려주는 Scroll Top 플로팅 버튼입니다. -->
+    <!-- [JS 연결 변수] const scrollTopButton = document.querySelector("#scroll-top"); -->
+    <!-- [상태 변화: 스크롤 이동 시] window.scrollY가 scrollThreshold(300px) 이상이 되면 'show' 클래스가 toggle되어 화면 우측 하단에 페이드인으로 나타납니다. 300px 미만으로 올라가면 'show' 클래스가 제거되어 사라집니다. -->
+    <!-- [상태 변화: 클릭 시] window.scrollTo({ top: 0, behavior: "smooth" })가 실행되어 뷰포트 맨 위로 부드럽게 스크롤됩니다. -->
     <button
         type="button"
         id="scroll-top"
@@ -447,6 +599,8 @@
         ↑
     </button>
 
+<!-- [역할] 브라우저 화면 출력 영역(body)을 닫습니다. -->
 </body>
 
+<!-- [역할] 최상위 HTML 문서 구조를 마칩니다. -->
 </html>
